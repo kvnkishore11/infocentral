@@ -1,0 +1,65 @@
+
+Develop a web application that is shown in the snapshots.
+
+The application is a web application that is shown in the snapshots.
+
+try to use Vite to develop the react application 
+
+Tech stack:
+- React
+- Material UI
+- Emotion
+- Redux
+
+The application we are building is a search portal for my company 'New York Life Insurance Company' called Infocentral.
+
+
+We are using Lucidworks Fusion to power the search. we make the api calls to Lucidworks to get the search results.
+https://newyorklife-stg.b.lucidworks.cloud/api/apps/agencyportal/query/infocentral?q=annuities&rows=10&start=0&debug=true&debug.explain.structured=true
+
+The app should have 3 modes.
+1 . Normal Mode ( Environment, Pipeline)
+
+So you need to incorporate the response we get from LucidWorks, which is in the JSON format. With that, there are 5 fields of which 3 fields are of our interest. 
+
+1. "debug".explain
+2. "response"
+3. "facets"
+
+
+Maybe initially you can start with using some metadata from some dummy data. Refer the documentation of LucidWorks to know how the metadata and response structure look like for our URL. 
+Btw, our URL is dynamic - it depends on which environment or pipeline I select, so the URL should change. 
+
+https://newyorklife-stg.b.lucidworks.cloud/api/apps/agencyportal/query/${pipeline}?q=annuities&rows=10&start=0&debug=true&debug.explain.structured=true  --> Modal environment 
+https://newyorklife-dev.b.lucidworks.cloud/api/apps/agencyportal/query/${pipeline}?q=annuities&rows=10&start=0&debug=true&debug.explain.structured=true --> Dev environment
+https://newyorklife.b.lucidworks.cloud/api/apps/agencyportal/query/${pipeline}?q=annuities&rows=10&start=0&debug=true&debug.explain.structured=true --> Production environment
+
+
+
+2. Debug Mode ( Environment, Pipeline) 
+In debug mode, you have something extra. You almost see the same UI as our normal mode, but you will also see an extra field for each result which is thescore given by LucidWorks. 
+If you hover on that score, a new model should open, and there you should see a high-level explanation of what contributed to that particular score.
+
+LucidWorks already provides a clear description in the Explain (debug.explain) section. I may not need the entire deep-rooted analysis; 
+I just want to know which word(match) - rule was applied and how much weight it got. This is the first layer or 2nd layer of information needed to understand that score. This is what I'm looking for in debug mode. 
+
+
+3. Compare Mode 
+Yeah, so in this mode, I'm looking for my screen to be divided into two halves. On one half, I can select any environment and any pipeline, and on the other half, I can select any environment and any pipeline. 
+Within that, we'll probably also have a normal mode and a debug mode, so I can compare two environments separately - that's the idea. 
+
+probably under the nav bar you can have sort of settings like drop-downs to enable the environment, mode,  and also pipeline you can decide upon what is more optimal based on your selection 
+
+Keeping this in mind, you need to architect the entire application, especially how you store the data is going to be very critical. Need to see how you are going to structure your Redux to make sure we have an efficient implementation. 
+
+As far as loading states are concerned, I am very much pro towards a skeleton loading. Try to incorporate the best skeleton loading. 
+
+ I'd like the UI to be more modern, very robust, with nice subtle animations if possible. Try your level best to give the best UI design as possible.
+ Think of yourself as the best UX developer in this entire world and design this website keeping all the best design principles in mind. 
+
+ 
+
+Also, what I am looking for is for every feature you are we are applying so I want you to write a test case beforehand some of the test cases beforehand and
+ I want you to verify like all the test cases are being passed for any small change we are making so that's the most important thing I want to do I want to take it like a test driven development sort of approach 
+
+
