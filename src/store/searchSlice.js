@@ -1,7 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Environment, Mode, Pipeline, SearchResult, SearchState, SearchFacets } from '../types';
+import { createSlice } from '@reduxjs/toolkit';
 
-const initialState: SearchState = {
+const initialState = {
   query: '',
   environment: 'stg',
   mode: 'normal',
@@ -14,63 +13,68 @@ const initialState: SearchState = {
     year: {},
     productLine: {},
   },
+  selectedFacets: [],
   totalResults: 0,
   currentPage: 1,
   itemsPerPage: 10,
   compareEnvironment: undefined,
   comparePipeline: undefined,
-  compareResults: undefined,
+  compareResults: [],
 };
 
 export const searchSlice = createSlice({
   name: 'search',
   initialState,
   reducers: {
-    setQuery: (state, action: PayloadAction<string>) => {
+    setQuery: (state, action) => {
       state.query = action.payload;
     },
-    setEnvironment: (state, action: PayloadAction<Environment>) => {
+    setEnvironment: (state, action) => {
       state.environment = action.payload;
     },
-    setMode: (state, action: PayloadAction<Mode>) => {
+    setMode: (state, action) => {
       state.mode = action.payload;
       if (action.payload !== 'compare') {
         state.compareEnvironment = undefined;
         state.comparePipeline = undefined;
-        state.compareResults = undefined;
+        state.compareResults = [];
       }
     },
-    setPipeline: (state, action: PayloadAction<Pipeline>) => {
+    setPipeline: (state, action) => {
       state.pipeline = action.payload;
     },
-    setCompareEnvironment: (state, action: PayloadAction<Environment>) => {
+    setCompareEnvironment: (state, action) => {
       state.compareEnvironment = action.payload;
     },
-    setComparePipeline: (state, action: PayloadAction<Pipeline>) => {
+    setComparePipeline: (state, action) => {
       state.comparePipeline = action.payload;
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
+    setLoading: (state, action) => {
       state.loading = action.payload;
     },
-    setError: (state, action: PayloadAction<string | null>) => {
+    setError: (state, action) => {
       state.error = action.payload;
     },
-    setResults: (state, action: PayloadAction<SearchResult[]>) => {
+    setResults: (state, action) => {
       state.results = action.payload;
+      state.totalResults = action.payload.length;
     },
-    setCompareResults: (state, action: PayloadAction<SearchResult[]>) => {
+    setCompareResults: (state, action) => {
       state.compareResults = action.payload;
     },
-    setFacets: (state, action: PayloadAction<SearchFacets>) => {
+    setFacets: (state, action) => {
       state.facets = action.payload;
     },
-    setTotalResults: (state, action: PayloadAction<number>) => {
+    setSelectedFacets: (state, action) => {
+      state.selectedFacets = action.payload;
+    },
+    setTotalResults: (state, action) => {
       state.totalResults = action.payload;
     },
-    setCurrentPage: (state, action: PayloadAction<number>) => {
+    setCurrentPage: (state, action) => {
       state.currentPage = action.payload;
     },
-    setItemsPerPage: (state, action: PayloadAction<number>) => {
+    setItemsPerPage: (state, action) => {
       state.itemsPerPage = action.payload;
     },
   },
@@ -88,6 +92,7 @@ export const {
   setResults,
   setCompareResults,
   setFacets,
+  setSelectedFacets,
   setTotalResults,
   setCurrentPage,
   setItemsPerPage,
