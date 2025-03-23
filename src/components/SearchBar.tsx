@@ -9,17 +9,28 @@ import {
   Typography,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { setQuery, setResults } from '../store/searchSlice';
+import { setQuery, setResults, setLoading } from '../store/searchSlice';
 import { mockSearchResults } from '../services/mockData';
 
 const SearchBar = () => {
   const dispatch = useDispatch();
   const [searchInput, setSearchInput] = useState('');
 
-  const handleSearch = useCallback(() => {
+  const handleSearch = useCallback(async () => {
+    if (!searchInput.trim()) return;
+    
     dispatch(setQuery(searchInput));
-    // For now, we'll use mock data. Later this will be replaced with actual API call
-    dispatch(setResults(mockSearchResults));
+    dispatch(setLoading(true));
+
+    // Simulate API delay
+    try {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      dispatch(setResults(mockSearchResults));
+    } catch (error) {
+      console.error('Search error:', error);
+    } finally {
+      dispatch(setLoading(false));
+    }
   }, [dispatch, searchInput]);
 
   const handleKeyPress = (event: React.KeyboardEvent) => {
@@ -59,7 +70,10 @@ const SearchBar = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={handleSearch} sx={{ mr: 1 }}>
+                <IconButton 
+                  onClick={() => handleSearch()} 
+                  sx={{ mr: 1 }}
+                >
                   <SearchIcon />
                 </IconButton>
               </InputAdornment>

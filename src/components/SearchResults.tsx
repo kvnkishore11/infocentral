@@ -13,12 +13,32 @@ import {
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import { RootState } from '../store';
-import { SearchResult, SearchState } from '../types';
+import { SearchResult, SearchState, Mode } from '../types';
 
 interface ResultCardProps {
   result: SearchResult;
   showDebug?: boolean;
 }
+
+const LoadingSkeleton = () => (
+  <Card sx={{ mb: 2 }}>
+    <CardContent>
+      <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+        <Skeleton variant="text" width="60%" height={32} />
+        <Skeleton variant="circular" width={24} height={24} />
+      </Box>
+      <Box sx={{ mt: 2, mb: 3 }}>
+        <Skeleton variant="text" width="100%" />
+        <Skeleton variant="text" width="100%" />
+        <Skeleton variant="text" width="80%" />
+      </Box>
+      <Box display="flex" alignItems="center">
+        <Skeleton variant="rectangular" width={100} height={24} sx={{ mr: 1, borderRadius: 1 }} />
+        <Skeleton variant="text" width={100} />
+      </Box>
+    </CardContent>
+  </Card>
+);
 
 const ResultCard = ({ result, showDebug }: ResultCardProps) => (
   <Card sx={{ mb: 2, '&:hover': { boxShadow: 6 } }}>
@@ -80,19 +100,38 @@ const SearchResults = () => {
   if (loading) {
     return (
       <Box sx={{ mt: 2 }}>
-        {[...Array(3)].map((_, index) => (
-          <Card key={index} sx={{ mb: 2 }}>
-            <CardContent>
-              <Skeleton variant="text" width="60%" height={32} />
-              <Skeleton variant="text" width="100%" />
-              <Skeleton variant="text" width="100%" />
-              <Box display="flex" justifyContent="space-between" mt={1}>
-                <Skeleton variant="text" width="20%" />
-                <Skeleton variant="text" width="20%" />
-              </Box>
-            </CardContent>
-          </Card>
-        ))}
+        {mode === 'compare' ? (
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6" gutterBottom sx={{ pl: 1 }}>
+                Primary Results
+                <Skeleton variant="text" width={60} sx={{ display: 'inline-block', ml: 1 }} />
+              </Typography>
+              {[...Array(3)].map((_, index) => (
+                <LoadingSkeleton key={`primary-${index}`} />
+              ))}
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6" gutterBottom sx={{ pl: 1 }}>
+                Compare Results
+                <Skeleton variant="text" width={60} sx={{ display: 'inline-block', ml: 1 }} />
+              </Typography>
+              {[...Array(3)].map((_, index) => (
+                <LoadingSkeleton key={`compare-${index}`} />
+              ))}
+            </Grid>
+          </Grid>
+        ) : (
+          <>
+            <Typography variant="h6" gutterBottom sx={{ pl: 1 }}>
+              Search Results
+              <Skeleton variant="text" width={60} sx={{ display: 'inline-block', ml: 1 }} />
+            </Typography>
+            {[...Array(3)].map((_, index) => (
+              <LoadingSkeleton key={index} />
+            ))}
+          </>
+        )}
       </Box>
     );
   }
@@ -121,7 +160,7 @@ const SearchResults = () => {
               <ResultCard
                 key={result.id}
                 result={result}
-                showDebug={mode === 'debug'}
+                showDebug={mode === 'debug' as Mode}
               />
             ))}
           </Grid>
@@ -133,7 +172,7 @@ const SearchResults = () => {
               <ResultCard
                 key={result.id}
                 result={result}
-                showDebug={mode === 'debug'}
+                showDebug={mode === 'debug' as Mode}
               />
             ))}
           </Grid>
@@ -147,7 +186,7 @@ const SearchResults = () => {
             <ResultCard
               key={result.id}
               result={result}
-              showDebug={mode === 'debug'}
+              showDebug={mode === 'debug' as Mode}
             />
           ))}
         </Box>
