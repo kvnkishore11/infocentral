@@ -44,27 +44,29 @@ function App() {
             </Toolbar>
           </AppBar>
           
-          <Container maxWidth={false} sx={{ 
-            mt: 3, 
-            mb: 3, 
-            flex: 1,
-            px: { xs: 2, sm: 3, md: 4 }
-          }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <SearchBar />
+          <Box component="main" sx={{ flexGrow: 1, width: '100%', pb: 3 }}>
+            <Container maxWidth={false} sx={{ 
+              mt: 3,
+              px: { xs: 2, sm: 3, md: 4 }
+            }}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <SearchBar />
+                </Grid>
+                <Grid item xs={12}>
+                  <SearchSettings />
+                </Grid>
+                <Grid container item spacing={3}>
+                  <Grid item xs={12} md={3} lg={2}>
+                    <SearchFacets />
+                  </Grid>
+                  <Grid item xs={12} md={9} lg={10}>
+                    <SearchResults />
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <SearchSettings />
-              </Grid>
-              <Grid item xs={12} md={3}>
-                <SearchFacets />
-              </Grid>
-              <Grid item xs={12} md={9}>
-                <SearchResults />
-              </Grid>
-            </Grid>
-          </Container>
+            </Container>
+          </Box>
         </Box>
       </ThemeProvider>
     </Provider>

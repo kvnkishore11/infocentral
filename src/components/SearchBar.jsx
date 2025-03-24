@@ -3,7 +3,7 @@ import { Paper, InputBase, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useDispatch, useSelector } from 'react-redux';
 import { setQuery, setLoading, setResults, setCompareResults } from '../store/searchSlice';
-import { mockSearchResults, mockCompareResults } from '../services/mockData';
+import { searchLucidworks } from '../services/lucidworks';
 
 const SearchBar = () => {
   const dispatch = useDispatch();
@@ -17,45 +17,28 @@ const SearchBar = () => {
     dispatch(setQuery(searchInput));
     dispatch(setLoading(true));
 
-    // Simulate API delay
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Filter mock results based on search input
-      const searchTerm = searchInput.toLowerCase();
-      let filteredResults = [];
-      
-      // Always set primary results
-      filteredResults = mockSearchResults.filter(result => 
-        result.title.toLowerCase().includes(searchTerm) ||
-        result.description.toLowerCase().includes(searchTerm) ||
-        result.documentType.toLowerCase().includes(searchTerm)
-      );
+      // Search with debug mode if enabled
+      const searchOptions = {
+        debug: mode === 'debug',
+        debugQuery: mode === 'debug',
+        debugExplain: { structured: mode === 'debug' }
+      };
 
-      // If no exact matches, show all results (for demo purposes)
-      if (filteredResults.length === 0) {
-        filteredResults = mockSearchResults;
-      }
-      
-      dispatch(setResults(filteredResults));
+      const searchResult = await searchLucidworks(searchInput, searchOptions);
+      dispatch(setResults(searchResult.results));
 
-      // If in compare mode, also set compare results
+      // If in compare mode, perform another search with different parameters
       if (mode === 'compare') {
-        let compareFilteredResults = mockCompareResults.filter(result =>
-          result.title.toLowerCase().includes(searchTerm) ||
-          result.content.toLowerCase().includes(searchTerm) ||
-          result.source.toLowerCase().includes(searchTerm)
-        );
-
-        // If no exact matches, show all compare results (for demo purposes)
-        if (compareFilteredResults.length === 0) {
-          compareFilteredResults = mockCompareResults;
-        }
-
-        dispatch(setCompareResults(compareFilteredResults));
+        const compareResult = await searchLucidworks(searchInput, {
+          ...searchOptions,
+          // Add any specific compare mode parameters here
+        });
+        dispatch(setCompareResults(compareResult.results));
       }
     } catch (error) {
       console.error('Search error:', error);
+      // You might want to dispatch an error action here
     } finally {
       dispatch(setLoading(false));
     }

@@ -17,7 +17,7 @@ import {
 import InfoIcon from '@mui/icons-material/Info';
 
 const LoadingSkeleton = () => (
-  <Card sx={{ mb: 2 }}>
+  <Card sx={{ mb: 2, width: '100%' }}>
     <CardContent>
       <Box display="flex" justifyContent="space-between" alignItems="flex-start">
         <Skeleton variant="text" width="60%" height={32} />
@@ -67,7 +67,15 @@ const DebugInfo = ({ result }) => (
 );
 
 const ResultCard = ({ result, showDebug }) => (
-  <Card sx={{ mb: 2, '&:hover': { boxShadow: 6 } }}>
+  <Card sx={{ 
+    mb: 2, 
+    width: '100%',
+    '&:hover': { 
+      boxShadow: 6,
+      transform: 'translateY(-2px)',
+      transition: 'transform 0.2s ease-in-out'
+    }
+  }}>
     <CardContent>
       <Typography variant="h6" component="h2" gutterBottom>
         {result.title}
@@ -97,7 +105,7 @@ const ResultCard = ({ result, showDebug }) => (
 const CompareView = ({ results, compareResults }) => (
   <Grid container spacing={3}>
     <Grid item xs={12} md={6}>
-      <Typography variant="h6" gutterBottom sx={{ pl: 1 }}>
+      <Typography variant="h6" gutterBottom>
         Primary Results ({results.length})
       </Typography>
       {results.map((result) => (
@@ -105,7 +113,7 @@ const CompareView = ({ results, compareResults }) => (
       ))}
     </Grid>
     <Grid item xs={12} md={6}>
-      <Typography variant="h6" gutterBottom sx={{ pl: 1 }}>
+      <Typography variant="h6" gutterBottom>
         Compare Results ({compareResults.length})
       </Typography>
       {compareResults.map((result) => (
@@ -120,8 +128,8 @@ const SearchResults = () => {
 
   if (loading) {
     return (
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h6" gutterBottom sx={{ pl: 1 }}>
+      <Box sx={{ width: '100%' }}>
+        <Typography variant="h6" gutterBottom>
           Loading Results...
         </Typography>
         {[1, 2, 3].map((key) => (
@@ -133,7 +141,7 @@ const SearchResults = () => {
 
   if (!query) {
     return (
-      <Box sx={{ mt: 2, textAlign: 'center' }}>
+      <Box sx={{ width: '100%', textAlign: 'center', py: 4 }}>
         <Typography variant="body1" color="text.secondary">
           Enter a search term to find documents
         </Typography>
@@ -143,7 +151,7 @@ const SearchResults = () => {
 
   if (results.length === 0) {
     return (
-      <Box sx={{ textAlign: 'center', mt: 4 }}>
+      <Box sx={{ width: '100%', textAlign: 'center', py: 4 }}>
         <Typography variant="body1" color="text.secondary">
           No results found for "{query}"
         </Typography>
@@ -156,8 +164,8 @@ const SearchResults = () => {
   }
 
   return (
-    <Box sx={{ mt: 4 }}>
-      <Typography variant="h6" gutterBottom sx={{ pl: 1 }}>
+    <Box sx={{ width: '100%' }}>
+      <Typography variant="h6" gutterBottom>
         Search Results ({results.length})
       </Typography>
       {results.map((result) => (
